@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using TechJobsOO;
 
 namespace TechJobsTests
@@ -54,72 +55,36 @@ namespace TechJobsTests
         public void TestToStringJobsMethodForBlankLineAtBeginning()
         {
             var print = _testJob.ToString();
-            Assert.AreEqual(print[0], '\n');
+            Assert.IsTrue(print.IndexOf(Environment.NewLine) == 0);
 
         }
 
         [TestMethod]
         public void TestToStringJobsMethodForBlankLineAtEnd()
         {
-            var print = _testJob.ToString();
-            Assert.AreEqual(print[^1], '\n');
+            string print = _testJob.ToString();
+            Assert.IsTrue(print.LastIndexOf(Environment.NewLine) == print.Length - 2);
+        } 
+
+        [TestMethod]
+        public void TestToStringPrintsEachProperyCorrectAndOnANewLine()
+        {
+            string print = _testJob.ToString();
+            Assert.IsTrue(print.Contains($"Id: {_testJob.Id}{Environment.NewLine}"));
+            Assert.IsTrue(print.Contains($"Employer: {_testJob.EmployerName}{Environment.NewLine}"));
+            Assert.IsTrue(print.Contains($"Location: {_testJob.EmployerLocation}{Environment.NewLine}"));
+            Assert.IsTrue(print.Contains($"Poistion Type: {_testJob.JobType}{Environment.NewLine}"));
+            Assert.IsTrue(print.Contains($"Core Competency: {_testJob.JobCoreCompetency}{Environment.NewLine}"));
+            Assert.IsTrue(print.Contains($"Name: {_testJob.Name}{Environment.NewLine}"));
         }
 
         [TestMethod]
-        public void ToStringMethodShouldPrintIdOnOwnLine()
+        public void ToStringMethodShouldPrintDataNotAvailableIfFieldIsEmpty()
         {
-            var print = _testJob.ToString();
-            var testID = _testJob.Id;
-            Assert.IsTrue(print.Contains($"\nID: {testID} \n"));
+            Job _testJob2 = new Job("Product tester", new Employer(""), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
+           string result = _testJob2.ToString();
+            Assert.IsTrue(result.Contains("Employer: Data not available"));
         }
 
-//        ID:  _______
-//Name: _______
-//Employer: _______
-//Location: _______
-//Position Type: _______
-//Core Competency: _______
-
-        [TestMethod]
-        public void ToStringMethodShouldPrintNameOnOwnLine()
-        {
-            var print = _testJob.ToString();
-            var testName = _testJob.Name;
-            Assert.IsTrue(print.Contains($"\nName: {testName} \n"));
-        }
-
-        [TestMethod]
-        public void ToStringMethodShouldPrintEmployerOnOwnLine()
-        {
-            var print = _testJob.ToString();
-            var testEmployer = _testJob.EmployerName;
-            Assert.IsTrue(print.Contains($"\nEmployer: {testEmployer}"));
-        }
-
-        [TestMethod]
-        public void ToStringMethodShouldPrintPositionTypeOnOwnLine()
-        {
-            var print = _testJob.ToString();
-            var testJobType = _testJob.JobType;
-            Assert.IsTrue(print.Contains($"\nPosition Type: {testJobType} \n"));
-        }
-
-        [TestMethod]
-        public void ToStringMethodShouldPrintLocationOnOwnLine()
-        {
-            var print = _testJob.ToString();
-            var testLocation = _testJob.EmployerLocation;
-            Assert.IsTrue(print.Contains($"\nLocation: {testLocation} \n"));
-        }
-
-        [TestMethod]
-        public void ToStringMethodShouldPrintCoreCompetencyOnOwnLine()
-        {
-            var print = _testJob.ToString();
-            var testCoreCompetency = _testJob.JobCoreCompetency;
-            Assert.IsTrue(print.Contains($"\nCore Competency: {testCoreCompetency} \n"));
-        }
-
-        // Left off at TDD test #3
     }
 }
